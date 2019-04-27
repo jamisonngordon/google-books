@@ -1,6 +1,10 @@
-# Create React Express App
+# google-books
+A simple simple tool that allows you to search the google books api and save books for future reference.
 
-## About This Boilerplate
+## Where 
+The app is deployed on heroku at: https://google-books-jg.herokuapp.com/
+
+## About This react-create-app
 
 This setup allows for a Node/Express/React app which can be easily deployed to Heroku.
 
