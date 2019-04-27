@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import API from '../utils/API';
 
 class Home extends Component {
@@ -30,7 +31,7 @@ class Home extends Component {
 
             if(bookInfo.title && bookInfo.authors && bookInfo.description && bookInfo.thumb && bookInfo.link) {
                 this.setState({
-                    input: '',
+                    //es6 magic to push to the books array state
                     books: [...this.state.books, bookInfo]
                 });
             }
@@ -45,10 +46,17 @@ class Home extends Component {
     };
 
     search = () => {
+        this.setState({
+           books: []
+        });
         API.bookSearch(this.state.input)
             .then((response) =>{
                 this.parseResults(response);
             });
+    };
+
+    saveBook = (event) => {
+        API.saveBook(this.state.books[event.target.id]);
     };
 
     render() {
@@ -56,8 +64,10 @@ class Home extends Component {
             <div>
                 <div className={'mt-5 ml-5 form-inline'}>
                     <label className={'mr-3'}>Search for a book: </label>
-                    <input className={'col-6 form-control mr-3'} onKeyDown={this.inputEnter} onChange={this.inputChange}/>
+                    <input className={'col-6 form-control mr-3'} onKeyDown={this.inputEnter}
+                           value={this.state.input} onChange={this.inputChange}/>
                     <button className={'col-2 btn btn-primary mr-3'} onClick={this.search}>Search</button>
+                    <Link to="/books">Saved Books</Link>
                 </div>
                 {
                     this.state.books.length > 0 &&
@@ -66,13 +76,13 @@ class Home extends Component {
                         <div className={'card'}  key={i}>
                             <div className={'card-body'}>
                                 <img src={book.thumb} alt={'img'} />
-                                <hr />
+                                <br />
                                 <a href={book.link}>{book.title}</a>
                                 <p>By: {book.authors.map((author, i) => {
                                     return author
                                 })}</p>
                                 <p>{book.description}</p>
-                                <button className={'btn btn-primary'}>Save</button>
+                                <button className={'btn btn-primary'} id={i} onClick={this.saveBook}>Save</button>
                             </div>
                          </div>)
                     })
